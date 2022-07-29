@@ -1,4 +1,4 @@
-MORELLO_SDK?=~/cheri/output/morello-sdk
+MORELLO_SDK?=${HOME}/cheri/output/morello-sdk
 
 TARGET_FLAGS=-target aarch64-unknown-freebsd
 DEBUG_FLAGS=-g
