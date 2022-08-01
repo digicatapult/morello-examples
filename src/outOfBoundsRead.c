@@ -24,9 +24,9 @@ int main(void)
 
     for (int i = 0; i < 32; i++)
     {
-        printf("\n");
-        printf("index: %d, letter: %c,", i, PUBLIC_INFORMATION[i]);
-    }
 
+        printf("index: %d, letter: %c,\n", i, PUBLIC_INFORMATION[i]);
+    }
+    printf("\n");
     return 0;
 }
