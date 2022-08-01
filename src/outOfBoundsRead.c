@@ -18,13 +18,13 @@ int getValueFromArray(int *array, int len, int index)
 
 int main(void)
 {
-    int *numbers[5];
+    int *numbers[100];
 
-    int result = getValueFromArray(*numbers, 5, -3);
+    int result = getValueFromArray(*numbers, 100, -50);
 
     printf("Lower bound pointer: %d, upper bound pointer: %d\n", &numbers[0], &numbers[4]);
 
-    printf("Out of bounds pointer: %d\n", &numbers[-3]);
+    printf("Out of bounds pointer: %d\n", &numbers[-50]);
 
     printf("Value at first index in array is %d\n", numbers[0]);
 
