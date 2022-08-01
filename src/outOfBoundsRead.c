@@ -24,11 +24,8 @@ int main(void)
 
     for (int i = 0; i < 32; i++)
     {
-        int index = i;
-        // printf("index: %d, letter: %d,", index, PUBLIC_INFORMATION[index]);
-
-        // Prints out the username and password from the SECRET_INFORMATION
-        printf("%c", PUBLIC_INFORMATION[i]);
+        printf("\n");
+        printf("index: %d, letter: %c,", i, PUBLIC_INFORMATION[i]);
     }
 
     return 0;
