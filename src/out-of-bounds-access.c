@@ -3,67 +3,56 @@
 #include <string.h>
 #include <stdlib.h>
 
-// An example of a user gaining access, despite entering an incorrect password, as long as it's long enough to go out of bounds of the allocated buffer.
+// An example of a user changing the root password by entering a username that's long enough to go out of bounds of the allocated input array.
 
-const char password[] = "password";
-
-void checkPassword(char buff[], int access[])
+int checkInput(char input[], char toMatch[])
 {
-    buff[strcspn(buff, "\n")] = '\0'; // strip \n from fgets
-    if (strcmp(buff, password))
+    input[strcspn(input, "\n")] = '\0'; // strip \n from fgets
+    if (strcmp(input, toMatch))
     {
-        printf("Wrong password\n");
+        printf("Wrong input\n");
+        return 0;
     }
     else
     {
-        printf("Correct password\n");
-        access[0] = 1;
+        printf("Correct input\n");
+        return 1;
     }
 }
 
-void checkAccess(int access[])
+void runAttempt(char input[], char username[], char password[])
 {
-    if (access[0])
+    printf("\nEnter username: \n");
+    fgets(input, 20, stdin);
+    if (!checkInput(input, username))
     {
-        printf("You have root access \n\n");
+        return;
     }
-    else
-    {
-        printf("You DO NOT have root access \n\n");
-    }
-}
 
-void logout(int access[2])
-{
-    access[0] = 0;
-}
-
-void runAttempt(char buff[], int access[])
-{
-    printf("Enter password: \n");
-    fgets(buff, 16, stdin);
-    printf("\nAttempt: %s", buff);
-    checkPassword(buff, access);
-    checkAccess(access);
-    logout(access);
+    printf("\nEnter password: \n");
+    fgets(input, 20, stdin);
+    checkInput(input, password);
 }
 
 int main(void)
 {
-    int access[2] = {0, 0};
-    char buff[8];
+    char username[] = "root";
+    char password[] = "password";
+
+    char input[10];
 
     // printf("%p\n", &access[0]);
-    // printf("%p\n", &buff[8]);
+    printf("%x\n", &input[sizeof(input)]);
+    printf("%x\n", &password);
 
     // check memory allocation is adjacent
-    assert((void *)&access[0] == (void *)&buff[sizeof(buff)]);
+    assert((void *)&password[0] == (void *)&input[sizeof(input)]);
 
     printf("Password is: %s\n\n", password);
 
     while (1)
     {
-        runAttempt(buff, access);
+        runAttempt(input, username, password);
     }
 
     return 0;
