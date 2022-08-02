@@ -20,8 +20,6 @@ int main(void)
 
     // printf("Secret pointer: %d, public pointer: %d\n", &SECRET_INFORMATION, &PUBLIC_INFORMATION);
 
-    char secretInfo;
-
     for (int i = 0; i < 32; i++)
     {
 
