@@ -15,16 +15,14 @@ int main(void)
     char password[16] = "ThisIsMyPassword";
     char username[16] = "username";
 
-    memcpy(SECRET_INFORMATION, password, 16);
     memcpy(PUBLIC_INFORMATION, username, 16);
+    memcpy(SECRET_INFORMATION, password, 16);
 
-    // printf("Secret pointer: %d, public pointer: %d\n", &SECRET_INFORMATION, &PUBLIC_INFORMATION);
-
-    for (int i = 0; i < 32; i++)
+    for (int i = 16; i < 32; i++)
     {
-
         printf("index: %d, letter: %c,\n", i, PUBLIC_INFORMATION[i]);
     }
     printf("\n");
+
     return 0;
 }
