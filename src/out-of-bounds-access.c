@@ -3,10 +3,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+// An example of a user gaining access, despite entering an incorrect password, as long as it's long enough to go out of bounds of the allocated buffer.
+
 const char password[] = "password";
 
 void checkPassword(char buff[], int access[])
 {
+    buff[strcspn(buff, "\n")] = '\0'; // strip \n from fgets
     if (strcmp(buff, password))
     {
         printf("Wrong password\n");
