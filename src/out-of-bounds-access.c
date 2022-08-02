@@ -8,7 +8,7 @@
 
 int checkInput(char input[], char toMatch[])
 {
-    input[strcspn(input, "\n")] = '\0'; // strip \n from fgets
+    input[strcspn(input, "\n")] = '\0'; // strip \n from end of fgets
     if (strcmp(input, toMatch))
     {
         printf("Wrong input\n");
@@ -42,7 +42,6 @@ int main(void)
 
     char input[10];
 
-    // printf("%p\n", &access[0]);
     printf("%x\n", &input[sizeof(input)]);
     printf("%x\n", &password);
 
