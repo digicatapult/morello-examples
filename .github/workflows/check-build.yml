@@ -20,6 +20,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           push: false
+          load: true
           file: ./Dockerfile
           context: .
           tags: |
