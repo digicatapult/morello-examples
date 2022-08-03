@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-// An example of a user changing the root password by entering a username that's long enough (>10 characters) to go out of bounds of the allocated input array.
-// The password is replaced with the out of bounds characters e.g. if `root------123` is inputted for a username, the password is now `123`.
+// An example of a user changing the root password by entering a username that's long enough (>12 characters) to go out of bounds of the allocated input array.
+// The password is replaced with the out of bounds characters e.g. if `root--------123` is inputted for a username, the password is now `123`.
 
 int checkInput(char input[], char toMatch[])
 {
@@ -21,18 +21,18 @@ int checkInput(char input[], char toMatch[])
     }
 }
 
-void runAttempt(char input[], char username[], char password[])
+int runAttempt(char input[], char username[], char password[])
 {
     printf("\nEnter username: \n");
     fgets(input, 20, stdin);
     if (!checkInput(input, username))
     {
-        return;
+        return 0;
     }
 
     printf("\nEnter password: \n");
     fgets(input, 20, stdin);
-    checkInput(input, password);
+    return (checkInput(input, password));
 }
 
 int main(void)
@@ -40,7 +40,7 @@ int main(void)
     char username[] = "root";
     char password[] = "password";
 
-    char input[10];
+    char input[12];
 
     printf("%x\n", &input[sizeof(input)]);
     printf("%x\n", &password);
