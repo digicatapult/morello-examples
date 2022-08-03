@@ -28,4 +28,4 @@ int main(void)
 	printf("lower[2] = %c\n", result);
 
 	return 0;
-
+}
