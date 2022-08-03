@@ -10,7 +10,7 @@ DIAG_FLAGS=-Wall -Wcheri
 CC=$(MORELLO_SDK)/bin/clang
 CFLAGS=$(TARGET_FLAGS) $(DEBUG_FLAGS) $(OPT_FLAGS) $(SYSROOT_FLAGS) $(LINKER_FLAGS) $(DIAG_FLAGS)
 
-EXAMPLES_LIST=out-of-bounds-write out-of-bounds-read
+EXAMPLES_LIST=out-of-bounds-write out-of-bounds-read out-of-bounds-readV2
 TARGET_LIST=$(patsubst %,$(CHERI_PATTERN), $(EXAMPLES_LIST)) $(patsubst %,$(AARCH64_PATTERN), $(EXAMPLES_LIST))
 
 .DEFAULT_GOAL := default
