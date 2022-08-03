@@ -1,0 +1,29 @@
+name: Build examples
+
+on:
+  push:
+    branches-ignore: ['main']
+
+jobs:
+  check-build:
+    name: Run build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Setup Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build Image
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          push: false
+          load: true
+          file: ./Dockerfile
+          context: .
+          tags: |
+            digicatapult/morello-examples:latest
+      - name: Check Build
+        run: docker run digicatapult/morello-examples:latest
