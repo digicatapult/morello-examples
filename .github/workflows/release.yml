@@ -71,7 +71,7 @@ jobs:
       - name: Build tarball
         run: |
           mkdir -p $(pwd)/build
-          docker run -v $(pwd)/build:/home/cheri/morello-examples/build digicatapult/morello-examples:latest
+          docker run -v $(pwd)/build:/home/cheri/morello-examples/build:rw digicatapult/morello-examples:latest
           tar cfvz ./morello-examples.tar.gz --transform='s%.*/%%' ./build/* ./.version ./.LICENCE
 
       # Build github release
