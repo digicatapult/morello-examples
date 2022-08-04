@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: ['main', "chore/release-flow"]
+    branches: ['main']
 
 jobs:
   preconditions:
