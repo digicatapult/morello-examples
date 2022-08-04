@@ -72,7 +72,7 @@ jobs:
         run: |
           mkdir -p $(pwd)/build
           docker run --user root -v $(pwd)/build:/home/cheri/morello-examples/build:rw digicatapult/morello-examples:latest
-          tar cfvz ./morello-examples.tar.gz --transform='s%.*/%%' ./build/* ./.version ./.LICENCE
+          tar cfvz ./morello-examples.tar.gz --transform='s%.*/%%' ./build/* ./.version
 
       # Build github release
       - name: Delete latest release
