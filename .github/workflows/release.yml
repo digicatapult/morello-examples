@@ -1,0 +1,113 @@
+name: Release
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  preconditions:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_name: ${{ steps.repo_ids.outputs.REPO_NAME }}
+      org_name: ${{ steps.repo_ids.outputs.ORG_NAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get repository identifiers
+        id: repo_ids
+        run: |
+          REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          ORG_NAME=$(echo "${{ github.event.repository.owner.name }}" | tr '[:upper:]' '[:lower:]')
+          echo "::set-output name=REPO_NAME::$REPO_NAME"
+          echo "::set-output name=ORG_NAME::$ORG_NAME"
+  check-version:
+    name: 'Check version'
+    runs-on: ubuntu-latest
+    outputs:
+      is_new_version: ${{ steps.get_version.outputs.IS_NEW_VERSION }}
+      version: ${{ steps.get_version.outputs.VERSION }}
+      build_date: ${{ steps.get_version.outputs.BUILD_DATE }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: git fetch --depth=1 --tags origin
+      - name: Check Build Version
+        id: get_version
+        run: ./scripts/check-version.sh
+        shell: bash
+      - name: Skipping release as version has not increased
+        if: steps.get_version.outputs.IS_NEW_VERSION != 'true'
+        shell: bash
+        run: |
+          echo "Skipping release as current version has already been published"
+
+  publish:
+    name: 'Publish package'
+    needs: [preconditions, check-version]
+    runs-on: ubuntu-latest
+    if: ${{ needs.check-version.outputs.is_new_version == 'true' }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Docker build
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Setup Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build Image
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          push: false
+          load: true
+          file: ./Dockerfile
+          context: .
+          tags: |
+            digicatapult/morello-examples:latest
+      - name: Build tarball
+        run: |
+          mkdir -p $(pwd)/build
+          docker run --user root -v $(pwd)/build:/home/cheri/morello-examples/build:rw digicatapult/morello-examples:latest
+          tar cfvz ./morello-examples.tar.gz --transform='s%.*/%%' ./build/* ./.version
+
+      # Build github release
+      - name: Delete latest release
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { owner, repo } = context.repo
+            try {
+              await github.rest.git.deleteRef({ owner, repo, ref: 'tags/latest' })
+            }
+            catch (err) {
+              if (err.status !== 422) throw err
+            }
+      - name: Build release version
+        uses: softprops/action-gh-release@v1
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          tag_name: ${{ needs.check-version.outputs.version }}
+          prerelease: false
+          name: ${{ needs.check-version.outputs.version }}
+          generate_release_notes: true
+          files: |
+            LICENCE
+            README.md
+            morello-examples.tar.gz
+      - name: Build release latest
+        uses: softprops/action-gh-release@v1
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          tag_name: latest
+          prerelease: false
+          name: Latest ${{ needs.check-version.outputs.version }}
+          generate_release_notes: true
+          files: |
+            LICENCE
+            README.md
+            morello-examples.tar.gz
