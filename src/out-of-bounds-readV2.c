@@ -18,7 +18,7 @@ int main(void)
     memcpy(PUBLIC_INFORMATION, username, 16);
     memcpy(SECRET_INFORMATION, password, 16);
 
-    printf("Secret pointer: %d, public pointer: %d\n", &SECRET_INFORMATION, &PUBLIC_INFORMATION);
+    printf("Secret pointer: %d, public pointer: %d\n", , &PUBLIC_INFORMATION);
 
     for (int i = 0; i < 32; i++)
     {
