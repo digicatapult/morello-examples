@@ -1,4 +1,4 @@
-MORELLO_SDK?=${HOME}/cheri/output-cornucopia/morello-sdk
+MORELLO_SDK?=${HOME}/cheri/output/morello-sdk
 
 TARGET_FLAGS=-target aarch64-unknown-freebsd
 DEBUG_FLAGS=-g
@@ -29,6 +29,7 @@ AARCH64_PATTERN=%-aarch64
 $(AARCH64_PATTERN): ./src/%.c
 	$(CC) $(CFLAGS) $< -o ./build/$@
 
+temporal-control-cheri: CFLAGS := $(CFLAGS) -march=morello+c64 -mabi=purecap -Xclang -morello-vararg=new -DCAPREVOKE
 %-cheri: CFLAGS := $(CFLAGS) -march=morello+c64 -mabi=purecap -Xclang -morello-vararg=new
 %-aarch64: CFLAGS := $(CFLAGS) -march=morello+noa64c
 
