@@ -1,4 +1,4 @@
-MORELLO_SDK?=${HOME}/cheri/output/morello-sdk
+MORELLO_SDK?=${HOME}/cheri/output-cornucopia/morello-sdk
 
 TARGET_FLAGS=-target aarch64-unknown-freebsd
 DEBUG_FLAGS=-g
@@ -10,7 +10,7 @@ DIAG_FLAGS=-Wall -Wcheri
 CC=$(MORELLO_SDK)/bin/clang
 CFLAGS=$(TARGET_FLAGS) $(DEBUG_FLAGS) $(OPT_FLAGS) $(SYSROOT_FLAGS) $(LINKER_FLAGS) $(DIAG_FLAGS)
 
-EXAMPLES_LIST=temporal-control
+EXAMPLES_LIST=temporal-control out-of-bounds-write out-of-bounds-read out-of-bounds-access out-of-bounds-readV2
 
 TARGET_LIST=$(patsubst %,$(CHERI_PATTERN), $(EXAMPLES_LIST)) $(patsubst %,$(AARCH64_PATTERN), $(EXAMPLES_LIST))
 
