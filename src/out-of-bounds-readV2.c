@@ -3,26 +3,44 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main(void)
+/*
+    This out of bounds read example requires 3 pieces of information as parameters to be passed through
+    in order to read the supplied data out of bounds. The information required is:
+    Data: the secret data entered by the user.
+    -32: This is the lower memory bound.
+    (-32 - (length of input + 1)): This strips any garbage from the end of the secret.
+*/
+
+const char data[] = "1415926535897932384626433832795";
+
+int main(int argc, char *argv[])
 {
 
-    char *PUBLIC_INFORMATION;
-    char *SECRET_INFORMATION;
+    char *SECRET_INFORMATION = (char *)malloc(32 * sizeof(char));
+    char *PUBLIC_INFORMATION = (char *)malloc(32 * sizeof(char));
 
-    PUBLIC_INFORMATION = (char *)malloc(16 * sizeof(char));
-    SECRET_INFORMATION = (char *)malloc(16 * sizeof(char));
+    printf("Storing Secret...\n");
 
-    char password[16] = "ThisIsMyPassword";
-    char username[16] = "username";
+    memcpy(SECRET_INFORMATION, argv[1], strlen(argv[1]) + sizeof(char));
+    memcpy(PUBLIC_INFORMATION, data, strlen(data) + sizeof(char));
 
-    memcpy(PUBLIC_INFORMATION, username, 16);
-    memcpy(SECRET_INFORMATION, password, 16);
-
-    printf("Secret pointer: %d, public pointer: %d\n", &SECRET_INFORMATION, &PUBLIC_INFORMATION);
-
-    for (int i = 0; i < 32; i++)
+    int startIndex = atoi(argv[2]);
+    int endIndex = atoi(argv[3]);
+    if (endIndex < startIndex)
     {
-        printf("index: %d, letter: %c,\n", i, PUBLIC_INFORMATION[i]);
+        printf("End index must be after start index\n");
+        return 1;
+    }
+    if (endIndex > 32)
+    {
+        printf("This program can only get the first 32 data entries.\n");
+        return 1;
+    }
+
+    printf("The data between indices %d and %d is: ", startIndex, endIndex);
+    for (int i = startIndex; i < endIndex; i++)
+    {
+        printf("%c", PUBLIC_INFORMATION[i]);
     }
     printf("\n");
 

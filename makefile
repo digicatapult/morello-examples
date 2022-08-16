@@ -2,7 +2,7 @@ MORELLO_SDK?=${HOME}/cheri/output/morello-sdk
 
 TARGET_FLAGS=-target aarch64-unknown-freebsd
 DEBUG_FLAGS=-g
-OPT_FLAGS=-O2
+OPT_FLAGS=-O0
 SYSROOT_FLAGS=--sysroot='$(MORELLO_SDK)/sysroot-morello-purecap'
 LINKER_FLAGS=-fuse-ld=lld
 DIAG_FLAGS=-Wall -Wcheri
