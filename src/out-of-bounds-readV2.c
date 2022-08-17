@@ -9,6 +9,9 @@
     Data: the secret data entered by the user.
     -32: This is the lower memory bound.
     (-32 - (length of input + 1)): This strips any garbage from the end of the secret.
+
+    The way to use this is out-of-bounds-readV2 (data) -32 (calculation from above)
+    I.E example arg1 arg2 arg3
 */
 
 const char data[] = "1415926535897932384626433832795";
