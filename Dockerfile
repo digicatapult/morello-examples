@@ -1,4 +1,4 @@
-FROM digicatapult/morello-sdk:latest
+FROM digicatapult/morello-sdk-caprevoke:latest
 
 USER cheri
 WORKDIR /home/cheri/morello-examples
