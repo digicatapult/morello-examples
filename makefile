@@ -12,7 +12,7 @@ DIAG_FLAGS=-Wall -Wcheri
 CC=$(MORELLO_SDK)/bin/clang
 CFLAGS=$(TARGET_FLAGS) $(DEBUG_FLAGS) $(OPT_FLAGS) $(SYSROOT_FLAGS) $(LINKER_FLAGS) $(DIAG_FLAGS)
 
-EXAMPLES_LIST=temporal-control out-of-bounds-write out-of-bounds-read out-of-bounds-access out-of-bounds-readV2
+EXAMPLES_LIST=use-after-free out-of-bounds-write out-of-bounds-read out-of-bounds-access out-of-bounds-readV2
 
 TARGET_LIST=$(patsubst %,$(CHERI_PATTERN), $(EXAMPLES_LIST)) $(patsubst %,$(AARCH64_PATTERN), $(EXAMPLES_LIST))
 
@@ -31,7 +31,7 @@ AARCH64_PATTERN=%-aarch64
 $(AARCH64_PATTERN): ./src/%.c
 	$(CC) $(CFLAGS) $< -o ./build/$@
 
-temporal-control-cheri: CFLAGS := $(CFLAGS) -march=morello+c64 -mabi=purecap -Xclang -morello-vararg=new -DCAPREVOKE
+use-after-free-cheri: CFLAGS := $(CFLAGS) -march=morello+c64 -mabi=purecap -Xclang -morello-vararg=new -DCAPREVOKE
 %-cheri: CFLAGS := $(CFLAGS) -march=morello+c64 -mabi=purecap -Xclang -morello-vararg=new
 %-aarch64: CFLAGS := $(CFLAGS) -march=morello+noa64c
 
