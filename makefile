@@ -1,8 +1,10 @@
-MORELLO_SDK?=${HOME}/cheri/output/morello-sdk
+MORELLO_ROOT?=${HOME}/cheri
+MORELLO_SDK?=${MORELLO_ROOT}/output/morello-sdk
+MORELLO_INSTALL?=${MORELLO_ROOT}/build
 
 TARGET_FLAGS=-target aarch64-unknown-freebsd
 DEBUG_FLAGS=-g
-OPT_FLAGS=-O2
+OPT_FLAGS=-O0
 SYSROOT_FLAGS=--sysroot='$(MORELLO_SDK)/sysroot-morello-purecap'
 LINKER_FLAGS=-fuse-ld=lld
 DIAG_FLAGS=-Wall -Wcheri
@@ -35,3 +37,5 @@ temporal-control-cheri: CFLAGS := $(CFLAGS) -march=morello+c64 -mabi=purecap -Xc
 
 all: $(TARGET_LIST)
 
+install:
+	cp ./build/* $(MORELLO_INSTALL)/
