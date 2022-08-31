@@ -31,11 +31,9 @@ int loginAttempt()
         printf("%s\n", "Login failed");
         return 1;
     }
-    else
-    {
-        printf("%s\n", "Login succeeded");
-        return 0;
-    }
+
+    printf("%s\n", "Login succeeded");
+    return 0;
 }
 
 int main(int argc, char *argv[])
