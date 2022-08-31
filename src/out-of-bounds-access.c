@@ -10,41 +10,32 @@
     attempted for a username, the password is now `123`.
 
     Requires an even number of arguments as 'username password' pairs. Attempts to login with each sequentially.
-    e.g. ./out-of-bounds-access.out root------------123 bla root 123
+    e.g. ./out-of-bounds-access root------------123 bla root 123
 */
 
 char *username;
+char *usernameBuffer;
 char *password;
-char *buffer;
+char *passwordBuffer;
 
-int checkCredentials(char *toMatch, char *successMessage, char *failureMessage)
+int loginAttempt()
 {
-    if (strcmp(buffer, toMatch))
+    if (strcmp(usernameBuffer, username))
     {
-        printf("%s\n", failureMessage);
-        return 0;
+        printf("%s\n", "Login failed");
+        return 1;
+    }
+
+    if (strcmp(passwordBuffer, password))
+    {
+        printf("%s\n", "Login failed");
+        return 1;
     }
     else
     {
-        printf("%s\n", successMessage);
-        return 1;
-    }
-}
-
-int runAttempt(char *usernameAttempt, char *passwordAttempt)
-{
-    printf("\nChecking username: %s \n", usernameAttempt);
-    memcpy(buffer, usernameAttempt, strlen(usernameAttempt) + 1);
-
-    if (!checkCredentials(username, "Valid user", "Unknown user"))
-    {
+        printf("%s\n", "Login succeeded");
         return 0;
     }
-
-    printf("\nChecking password... \n");
-    memcpy(buffer, passwordAttempt, strlen(passwordAttempt) + 1);
-
-    return (checkCredentials(password, "Correct", "Wrong"));
 }
 
 int main(int argc, char *argv[])
@@ -56,19 +47,24 @@ int main(int argc, char *argv[])
     }
 
     username = malloc(16 * sizeof(char));
-    buffer = malloc(16 * sizeof(char));
+    usernameBuffer = malloc(16 * sizeof(char));
     password = malloc(16 * sizeof(char));
+    passwordBuffer = malloc(16 * sizeof(char));
 
     // check memory allocation is adjacent
-    assert((void *)&password[0] == (void *)&buffer[16]);
+    assert((void *)&password[0] == (void *)&usernameBuffer[16]);
 
     // set username and password
-    memcpy(username, "root", strlen("root") + sizeof(char));
-    memcpy(password, "password", strlen("password") + sizeof(char));
+    strcpy(username, "root");
+    strcpy(password, "password");
 
     for (int i = 1; i < argc; i += 2)
     {
-        runAttempt(argv[i], argv[i + 1]);
+        char *usernameAttempt = argv[i];
+        char *passwordAttempt = argv[i + 1];
+        strcpy(usernameBuffer, usernameAttempt);
+        strcpy(passwordBuffer, passwordAttempt);
+        loginAttempt();
     }
 
     return 0;
