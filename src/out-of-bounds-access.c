@@ -5,12 +5,12 @@
 
 /*
     An example of a user changing the root password by attempting to login with a username that's
-    long enough (>10 characters) to go out of bounds of the allocated buffer array.
-    The password is replaced with the out of bounds characters e.g. if `root------123` is attempted
+    long enough (>12 characters) to go out of bounds of the allocated buffer array.
+    The password is replaced with the out of bounds characters e.g. if `root--------123` is attempted
     for a username, the password is now `123`.
 
     Requires an even number of arguments as 'username password' pairs. Attempts to login with each sequentially.
-    e.g. ./out-of-bounds-access.out root------123 bla root 123
+    e.g. ./out-of-bounds-access.out root--------123 bla root 123
 */
 
 int checkCredentials(char *input, char *toMatch, char *successMessage, char *failureMessage)
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     char username[] = "root";
     char password[] = "password";
-    char buffer[10];
+    char buffer[12];
 
     // check memory allocation is adjacent
     assert((void *)&password[0] == (void *)&buffer[sizeof(buffer)]);
