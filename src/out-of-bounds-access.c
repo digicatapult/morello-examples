@@ -5,17 +5,21 @@
 
 /*
     An example of a user changing the root password by attempting to login with a username that's
-    long enough (>12 characters) to go out of bounds of the allocated buffer array.
-    The password is replaced with the out of bounds characters e.g. if `root--------123` is attempted
-    for a username, the password is now `123`.
+    long enough (>16 characters) to go out of bounds of the allocated buffer array.
+    The password is replaced with the out of bounds characters e.g. if `root------------123` is
+    attempted for a username, the password is now `123`.
 
     Requires an even number of arguments as 'username password' pairs. Attempts to login with each sequentially.
-    e.g. ./out-of-bounds-access.out root--------123 bla root 123
+    e.g. ./out-of-bounds-access.out root------------123 bla root 123
 */
 
-int checkCredentials(char *input, char *toMatch, char *successMessage, char *failureMessage)
+char *username;
+char *password;
+char *buffer;
+
+int checkCredentials(char *toMatch, char *successMessage, char *failureMessage)
 {
-    if (strcmp(input, toMatch))
+    if (strcmp(buffer, toMatch))
     {
         printf("%s\n", failureMessage);
         return 0;
@@ -27,12 +31,12 @@ int checkCredentials(char *input, char *toMatch, char *successMessage, char *fai
     }
 }
 
-int runAttempt(char *username, char *password, char *buffer, char *usernameAttempt, char *passwordAttempt)
+int runAttempt(char *usernameAttempt, char *passwordAttempt)
 {
     printf("\nChecking username: %s \n", usernameAttempt);
     memcpy(buffer, usernameAttempt, strlen(usernameAttempt) + 1);
 
-    if (!checkCredentials(buffer, username, "Valid user", "Unknown user"))
+    if (!checkCredentials(username, "Valid user", "Unknown user"))
     {
         return 0;
     }
@@ -40,7 +44,7 @@ int runAttempt(char *username, char *password, char *buffer, char *usernameAttem
     printf("\nChecking password... \n");
     memcpy(buffer, passwordAttempt, strlen(passwordAttempt) + 1);
 
-    return (checkCredentials(buffer, password, "Correct", "Wrong"));
+    return (checkCredentials(password, "Correct", "Wrong"));
 }
 
 int main(int argc, char *argv[])
@@ -51,16 +55,20 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    char username[] = "root";
-    char password[] = "password";
-    char buffer[12];
+    username = malloc(16 * sizeof(char));
+    buffer = malloc(16 * sizeof(char));
+    password = malloc(16 * sizeof(char));
 
     // check memory allocation is adjacent
-    assert((void *)&password[0] == (void *)&buffer[sizeof(buffer)]);
+    assert((void *)&password[0] == (void *)&buffer[16]);
+
+    // set username and password
+    memcpy(username, "root", strlen("root") + sizeof(char));
+    memcpy(password, "password", strlen("password") + sizeof(char));
 
     for (int i = 1; i < argc; i += 2)
     {
-        runAttempt(username, password, buffer, argv[i], argv[i + 1]);
+        runAttempt(argv[i], argv[i + 1]);
     }
 
     return 0;
